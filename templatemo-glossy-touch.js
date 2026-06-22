@@ -150,7 +150,10 @@
                         throw new Error(data.error || '服务器验证失败，请稍后再试。');
                     }
 
-                    const value = data.value || data.contact || data[selectedType];
+                    const value = data.value ||
+                                  data.contact?.[selectedType] ||
+             					  data[selectedType];
+
                     if (!value) {
                         throw new Error('服务器没有返回联系方式内容。');
                     }
