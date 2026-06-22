@@ -128,10 +128,46 @@
                 });
             };
 
+            const clearTurnstile = () => {
+                if (window.turnstile && turnstileWidgetId !== null) {
+                    window.turnstile.remove(turnstileWidgetId);
+                    turnstileWidgetId = null;
+                }
+                if (turnstileContainer) {
+                    turnstileContainer.innerHTML = '';
+                }
+            };
+
+            const extractContactValue = (payload, type) => {
+                if (typeof payload === 'string') return payload;
+                if (!payload || typeof payload !== 'object') return '';
+
+                const candidates = [
+                    payload.value,
+                    payload.contact,
+                    payload.contact?.[type],
+                    payload.data,
+                    payload.data?.value,
+                    payload.data?.contact,
+                    payload.data?.[type],
+                    payload[type],
+                    payload.text,
+                    payload.result
+                ];
+
+                for (const candidate of candidates) {
+                    const value = extractContactValue(candidate, type);
+                    if (value) return value;
+                }
+
+                return '';
+            };
+
             const revealContact = async (token) => {
                 if (!selectedType) return;
                 setButtonsDisabled(true);
                 setStatus(`正在向服务器请求${typeLabels[selectedType] || '联系方式'}...`);
+                let revealSucceeded = false;
 
                 try {
                     const response = await fetch(apiUrl, {
@@ -145,14 +181,19 @@
                         })
                     });
 
-                    const data = await response.json().catch(() => ({}));
+                    const responseText = await response.text();
+                    let data = responseText;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch {
+                        // Plain text responses are valid too.
+                    }
+
                     if (!response.ok) {
                         throw new Error(data.error || '服务器验证失败，请稍后再试。');
                     }
 
-                    const value = data.value ||
-                                  data.contact?.[selectedType] ||
-             					  data[selectedType];
+                    const value = extractContactValue(data, selectedType);
 
                     if (!value) {
                         throw new Error('服务器没有返回联系方式内容。');
@@ -161,12 +202,14 @@
                     const item = secureContact.querySelector(`[data-contact-type="${selectedType}"]`);
                     const valueNode = item?.querySelector('.contact-value');
                     if (valueNode) valueNode.textContent = value;
+                    revealSucceeded = true;
+                    clearTurnstile();
                     setStatus(`${typeLabels[selectedType] || '联系方式'}已显示。`);
                 } catch (error) {
                     setStatus(error.message || '请求失败，请稍后再试。');
                 } finally {
                     setButtonsDisabled(false);
-                    if (window.turnstile && turnstileWidgetId !== null) {
+                    if (!revealSucceeded && window.turnstile && turnstileWidgetId !== null) {
                         window.turnstile.reset(turnstileWidgetId);
                     }
                 }
@@ -202,6 +245,7 @@
                     selectedType = item?.dataset.contactType || null;
                     if (!selectedType) return;
 
+                    clearTurnstile();
                     setStatus(`请完成验证以显示${typeLabels[selectedType] || '联系方式'}。`);
                     renderTurnstile();
                 });
