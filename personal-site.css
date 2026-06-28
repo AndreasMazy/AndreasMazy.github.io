@@ -132,6 +132,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 24px;
     padding: 30px 45px;
 }
 .logo {
@@ -144,6 +145,10 @@ nav {
     align-items: center;
     gap: 15px;
     cursor: pointer;
+    flex-shrink: 0;
+}
+.logo span {
+    line-height: 1.15;
 }
 .logo-icon {
     width: 64px;
@@ -164,7 +169,10 @@ nav {
 }
 .nav-links {
     display: flex;
-    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
 }
 .nav-links a {
     color: rgba(255, 255, 255, 0.9);
@@ -175,13 +183,24 @@ nav {
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    white-space: nowrap;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+.nav-links .language-link {
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-bottom-color: rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
 }
 .nav-links a:hover,
 .nav-links a.active {
     color: white;
     background: rgba(255, 255, 255, 0.1);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+.nav-links .language-link:hover {
+    background: rgba(255, 255, 255, 0.18);
 }
 /* Page system */
 .page {
@@ -978,6 +997,9 @@ button[type="submit"] {
         max-width: 200px;
         font-size: 14px;
         padding: 10px 20px;
+    }
+    .nav-links .language-link {
+        max-width: 120px;
     }
     .about-content,
     .contact-grid {

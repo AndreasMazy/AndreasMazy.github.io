@@ -1,3 +1,47 @@
+        const pageLanguage = document.documentElement.lang || 'zh-CN';
+        const isEnglishPage = pageLanguage.toLowerCase().startsWith('en');
+        const siteCopy = isEnglishPage ? {
+            formSuccess: 'Message sent successfully! I will reply as soon as possible.',
+            contactMethod: 'contact method',
+            contactLabels: {
+                email: 'email',
+                phone: 'phone',
+                qq: 'QQ',
+                wechat: 'WeChat',
+                whatsapp: 'WhatsApp'
+            },
+            requesting: (label) => `Requesting ${label} from the server...`,
+            serverValidationFailed: 'Server verification failed. Please try again later.',
+            noContactContent: 'The server did not return contact details.',
+            shown: (label) => `${label} is now shown.`,
+            requestFailed: 'Request failed. Please try again later.',
+            turnstileKeyMissing: 'Please configure the Cloudflare Turnstile site key in contact-en.html.',
+            loadingTurnstile: 'Loading Cloudflare Turnstile, please wait...',
+            verificationExpired: 'Verification expired. Please complete it again.',
+            verificationLoadFailed: 'Verification failed to load. Please refresh the page and try again.',
+            verifyToShow: (label) => `Please complete verification to show ${label}.`
+        } : {
+            formSuccess: '消息已发送成功！我会尽快回复你。',
+            contactMethod: '联系方式',
+            contactLabels: {
+                email: '电子邮箱',
+                phone: '电话',
+                qq: 'QQ',
+                wechat: '微信',
+                whatsapp: 'WhatsApp'
+            },
+            requesting: (label) => `正在向服务器请求${label}...`,
+            serverValidationFailed: '服务器验证失败，请稍后再试。',
+            noContactContent: '服务器没有返回联系方式内容。',
+            shown: (label) => `${label}已显示。`,
+            requestFailed: '请求失败，请稍后再试。',
+            turnstileKeyMissing: '请先在 contact.html 中填写 Cloudflare Turnstile 站点密钥。',
+            loadingTurnstile: '正在加载 Cloudflare Turnstile，请稍候...',
+            verificationExpired: '验证已过期，请重新完成验证。',
+            verificationLoadFailed: '验证加载失败，请刷新页面后重试。',
+            verifyToShow: (label) => `请完成验证以显示${label}。`
+        };
+
         // Add interactive parallax effect to background shapes
         document.addEventListener('mousemove', (e) => {
             const shapes = document.querySelectorAll('.shape');
@@ -86,7 +130,7 @@
                     z-index: 10000;
                     animation: fadeIn 0.3s ease;
                 `;
-                successMsg.textContent = '消息已发送成功！我会尽快回复你。';
+                successMsg.textContent = siteCopy.formSuccess;
                 
                 document.body.appendChild(successMsg);
                 
@@ -108,13 +152,7 @@
             const turnstileContainer = document.getElementById('contact-turnstile');
             const statusText = document.getElementById('contact-reveal-status');
             const revealButtons = secureContact.querySelectorAll('.reveal-contact-button');
-            const typeLabels = {
-                email: '电子邮箱',
-                phone: '电话',
-                qq: 'QQ',
-                wechat: '微信',
-                whatsapp: 'WhatsApp'
-            };
+            const typeLabels = siteCopy.contactLabels;
             let selectedType = null;
             let turnstileWidgetId = null;
 
@@ -166,7 +204,7 @@
             const revealContact = async (token) => {
                 if (!selectedType) return;
                 setButtonsDisabled(true);
-                setStatus(`正在向服务器请求${typeLabels[selectedType] || '联系方式'}...`);
+                setStatus(siteCopy.requesting(typeLabels[selectedType] || siteCopy.contactMethod));
                 let revealSucceeded = false;
 
                 try {
@@ -190,13 +228,13 @@
                     }
 
                     if (!response.ok) {
-                        throw new Error(data.error || '服务器验证失败，请稍后再试。');
+                        throw new Error(data.error || siteCopy.serverValidationFailed);
                     }
 
                     const value = extractContactValue(data, selectedType);
 
                     if (!value) {
-                        throw new Error('服务器没有返回联系方式内容。');
+                        throw new Error(siteCopy.noContactContent);
                     }
 
                     const item = secureContact.querySelector(`[data-contact-type="${selectedType}"]`);
@@ -204,9 +242,9 @@
                     if (valueNode) valueNode.textContent = value;
                     revealSucceeded = true;
                     clearTurnstile();
-                    setStatus(`${typeLabels[selectedType] || '联系方式'}已显示。`);
+                    setStatus(siteCopy.shown(typeLabels[selectedType] || siteCopy.contactMethod));
                 } catch (error) {
-                    setStatus(error.message || '请求失败，请稍后再试。');
+                    setStatus(error.message || siteCopy.requestFailed);
                 } finally {
                     setButtonsDisabled(false);
                     if (!revealSucceeded && window.turnstile && turnstileWidgetId !== null) {
@@ -217,12 +255,12 @@
 
             const renderTurnstile = () => {
                 if (!siteKey || siteKey === 'YOUR_TURNSTILE_SITE_KEY') {
-                    setStatus('请先在 contact.html 中填写 Cloudflare Turnstile 站点密钥。');
+                    setStatus(siteCopy.turnstileKeyMissing);
                     return;
                 }
 
                 if (!window.turnstile) {
-                    setStatus('正在加载 Cloudflare Turnstile，请稍候...');
+                    setStatus(siteCopy.loadingTurnstile);
                     window.setTimeout(renderTurnstile, 400);
                     return;
                 }
@@ -231,8 +269,8 @@
                     turnstileWidgetId = window.turnstile.render(turnstileContainer, {
                         sitekey: siteKey,
                         callback: revealContact,
-                        'expired-callback': () => setStatus('验证已过期，请重新完成验证。'),
-                        'error-callback': () => setStatus('验证加载失败，请刷新页面后重试。')
+                        'expired-callback': () => setStatus(siteCopy.verificationExpired),
+                        'error-callback': () => setStatus(siteCopy.verificationLoadFailed)
                     });
                 } else {
                     window.turnstile.reset(turnstileWidgetId);
@@ -246,7 +284,7 @@
                     if (!selectedType) return;
 
                     clearTurnstile();
-                    setStatus(`请完成验证以显示${typeLabels[selectedType] || '联系方式'}。`);
+                    setStatus(siteCopy.verifyToShow(typeLabels[selectedType] || siteCopy.contactMethod));
                     renderTurnstile();
                 });
             });
