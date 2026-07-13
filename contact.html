@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系 - Zeyu Ma</title>
+    
+    <link rel="stylesheet" href="personal-site.css">
+    <link rel="alternate" hreflang="zh-CN" href="contact.html">
+    <link rel="alternate" hreflang="en" href="contact-en.html">
+    <link rel="alternate" hreflang="de" href="contact-de.html">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="bg-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav class="glass">
+                <a class="logo" href="index.html" aria-label="首页">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 48 48" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid of circles with varying sizes -->
+                            <circle cx="16" cy="16" r="5" opacity="0.9"/>
+                            <circle cx="32" cy="16" r="4" opacity="0.8"/>
+                            <circle cx="16" cy="32" r="4" opacity="0.7"/>
+                            <circle cx="32" cy="32" r="5" opacity="0.85"/>
+                            <!-- Small accent dots -->
+                            <circle cx="24" cy="8" r="2" opacity="1"/>
+                            <circle cx="8" cy="24" r="2" opacity="0.9"/>
+                            <circle cx="40" cy="24" r="2" opacity="0.9"/>
+                            <circle cx="24" cy="40" r="2" opacity="1"/>
+                            <!-- Tiny corner dots -->
+                            <circle cx="8" cy="8" r="1" opacity="0.6"/>
+                            <circle cx="40" cy="8" r="1" opacity="0.6"/>
+                            <circle cx="8" cy="40" r="1" opacity="0.6"/>
+                            <circle cx="40" cy="40" r="1" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <span>Zeyu Ma的个人站</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html">首页</a>
+                    <a href="about.html">个人介绍</a>
+                    <a href="project.html">项目</a>
+                    <a href="contact.html" class="active">联系方式</a>
+                    <div class="language-selector">
+                        <button type="button" class="language-trigger" aria-haspopup="true" aria-expanded="false">
+                            <span class="language-trigger-label">语言</span>
+                            <span class="language-trigger-current">中文</span>
+                        </button>
+                        <div class="language-menu" role="menu">
+                            <a href="contact-en.html" class="language-option" lang="en" hreflang="en" role="menuitem">EN</a>
+                            <a href="contact-de.html" class="language-option" lang="de" hreflang="de" role="menuitem">DE</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- 联系页面 -->
+    <div id="contact" class="page active">
+        <div class="container">
+            <div class="content-wrapper">
+                <section class="contact-grid">
+                    <div class="contact-form glass">
+                        <h2>联系我</h2>
+                        <form>
+                            <div class="form-group">
+                                <label for="name">姓名</label>
+                                <input type="text" id="name" name="name" placeholder="请输入你的姓名" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">邮箱地址</label>
+                                <input type="email" id="email" name="email" placeholder="请输入你的邮箱" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">主题</label>
+                                <input type="text" id="subject" name="subject" placeholder="你想咨询什么？">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">留言</label>
+                                <textarea id="message" name="message" placeholder="请简单介绍你的想法或需求..." required></textarea>
+                            </div>
+                            <button type="submit" class="cta-button">发送消息</button>
+                        </form>
+                    </div>
+
+                    <div class="contact-info glass" id="secure-contact" data-api-url="https://contact-api.andreasma.qzz.io/reveal" data-turnstile-site-key="0x4AAAAAADpA45Y4Dc3JiwGT">
+                        <h2>联系信息</h2>
+                        <p class="secure-contact-intro">点击任一联系方式后显示内容。</p>
+                        
+                        <div class="contact-item secure-contact-item" data-contact-type="email">
+                            <div class="contact-item-icon">📧</div>
+                            <div class="contact-item-text">
+                                <h4>电子邮箱</h4>
+                                <p class="contact-value">验证后显示</p>
+                            </div>
+                            <button type="button" class="reveal-contact-button">显示</button>
+                        </div>
+
+                        <div class="contact-item secure-contact-item" data-contact-type="phone">
+                            <div class="contact-item-icon">📞</div>
+                            <div class="contact-item-text">
+                                <h4>电话</h4>
+                                <p class="contact-value">验证后显示</p>
+                            </div>
+                            <button type="button" class="reveal-contact-button">显示</button>
+                        </div>
+
+                        <div class="contact-item secure-contact-item" data-contact-type="whatsapp">
+                            <div class="contact-item-icon">WA</div>
+                            <div class="contact-item-text">
+                                <h4>WhatsApp</h4>
+                                <p class="contact-value">验证后显示</p>
+                            </div>
+                            <button type="button" class="reveal-contact-button">显示</button>
+                        </div>
+
+                        <div class="contact-item secure-contact-item" data-contact-type="qq">
+                            <div class="contact-item-icon">QQ</div>
+                            <div class="contact-item-text">
+                                <h4>QQ</h4>
+                                <p class="contact-value">验证后显示</p>
+                            </div>
+                            <button type="button" class="reveal-contact-button">显示</button>
+                        </div>
+
+                        <div class="contact-item secure-contact-item" data-contact-type="wechat">
+                            <div class="contact-item-icon">微</div>
+                            <div class="contact-item-text">
+                                <h4>微信</h4>
+                                <p class="contact-value">验证后显示</p>
+                            </div>
+                            <button type="button" class="reveal-contact-button">显示</button>
+                        </div>
+
+                        <div class="contact-item public-contact-item">
+                            <div class="contact-item-icon">in</div>
+                            <div class="contact-item-text">
+                                <h4>LinkedIn</h4>
+                                <p><a href="https://www.linkedin.com/in/ma-zeyu" target="_blank" rel="noopener noreferrer">linkedin.com/in/ma-zeyu</a></p>
+                            </div>
+                        </div>
+
+                        <div class="turnstile-panel" aria-live="polite">
+                            <div id="contact-turnstile"></div>
+                            <p id="contact-reveal-status">请选择要显示的联系方式。</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 页脚 -->
+    <div id="footer">
+        <div class="container">
+            <footer class="glass">
+                <div class="footer-content">
+                    <div class="footer-links">
+                        <a href="index.html">首页</a>
+                        <a href="about.html">个人介绍</a>
+                        <a href="project.html">项目</a>
+                        <a href="contact.html">联系方式</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+<script src="personal-site.js"></script>
+</body>
+</html>
